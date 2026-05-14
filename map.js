@@ -1,6 +1,5 @@
 import * as d3 from 'https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm';
 import mapboxgl from 'https://cdn.jsdelivr.net/npm/mapbox-gl@2.15.0/+esm';
-// Check that Mapbox GL JS is loaded
 console.log('Mapbox GL JS Loaded:', mapboxgl);
 
 mapboxgl.accessToken = 'pk.eyJ1IjoiYW5pYm9wcGFuYSIsImEiOiJjbXA1dnY5NWYwZnUxMnhwcmV5dmhnNTVxIn0.KBo1AJPuyZI7gW_53DzUSg';
@@ -21,7 +20,7 @@ const bikeLaneStyle = {
 };
 
 function getCoords(station) {
-  const point = new mapboxgl.LngLat(+station.lon, +station.lat);
+  const point = new mapboxgl.LngLat(+station.Long, +station.Lat);
   const { x, y } = map.project(point);
   return { cx: x, cy: y };
 }
@@ -36,7 +35,6 @@ map.on('load', async () => {
     type: 'line',
     source: 'boston_route',
     paint: bikeLaneStyle,
-    
   });
 
   map.addSource('cambridge_route', {
@@ -51,37 +49,71 @@ map.on('load', async () => {
   });
 
   const svg = d3.select('#map').select('svg');
+  const jsonurl = 'bluebikes-stations.json';
+  const jsonData = await d3.json(jsonurl);
 
+  let stations = jsonData.data.stations.filter(d => !isNaN(+d.Lat) && !isNaN(+d.Long));
 
-const jsonurl = 'bluebikes-stations.json';
-const jsonData = await d3.json(jsonurl);
-console.log('Loaded JSON Data:', jsonData);
+  let trips = await d3.csv(
+    'bluebikes-traffic-2024-03.csv',
+    (trip) => {
+      trip.started_at = new Date(trip.started_at);
+      trip.ended_at = new Date(trip.ended_at);
+      return trip;
+    }
+  );
 
-let stations = jsonData.data.stations;
+  const departures = d3.rollup(
+    trips,
+    v => v.length,
+    d => d.start_station_id
+  );
+  const arrivals = d3.rollup(
+    trips,
+    v => v.length,
+    d => d.end_station_id
+  );
+  stations = stations.map(station => {
+    let id = station.short_name;
+    station.arrivals = arrivals.get(id) ?? 0;
+    station.departures = departures.get(id) ?? 0;
+    station.totalTraffic = station.arrivals + station.departures;
+    return station;
+  });
 
-console.log('Stations Array:', stations);
+  const radiusScale = d3
+    .scaleSqrt()
+    .domain([0, d3.max(stations, d => d.totalTraffic)])
+    .range([0, 25]);
 
-const circles = svg
-  .selectAll('circle')
-  .data(stations)
-  .enter()
-  .append('circle')
-  .attr('r', 5)
-  .attr('fill', 'steelblue')
-  .attr('stroke', 'white')
-  .attr('stroke-width', 1)
-  .attr('opacity', 0.8);
+  const circles = svg
+    .selectAll('circle')
+    .data(stations, d => d.short_name)
+    .enter()
+    .append('circle')
+    .attr('r', d => radiusScale(d.totalTraffic))
+    .attr('fill', 'steelblue')
+    .attr('fill-opacity', 0.6)
+    .attr('stroke', 'white')
+    .attr('stroke-width', 1)
+    .attr('pointer-events', 'auto')
+    .each(function (d) {
+      d3.select(this)
+        .append('title')
+        .text(
+          `${d.totalTraffic} trips (${d.departures} departures, ${d.arrivals} arrivals)`
+        );
+    });
 
-function updatePositions() {
+  function updatePositions() {
     circles
-    .attr('cx', (d) => getCoords(d).cx)
-    .attr('cy', (d) => getCoords(d).cy);
-}
+      .attr('cx', d => getCoords(d).cx)
+      .attr('cy', d => getCoords(d).cy);
+  }
 
-updatePositions();
-
-map.on('move', updatePositions);
-map.on('zoom', updatePositions);
-map.on('resize', updatePositions);
-map.on('moveend', updatePositions);
+  updatePositions();
+  map.on('move', updatePositions);
+  map.on('zoom', updatePositions);
+  map.on('resize', updatePositions);
+  map.on('moveend', updatePositions);
 });
