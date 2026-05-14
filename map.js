@@ -52,39 +52,35 @@ map.on('load', async () => {
 
   const svg = d3.select('#map').select('svg');
 
-  try {
-    const jsonurl = 'https://dsc106.com/labs/lab07/data/bluebikes-stations.json';
-    const jsonData = await d3.json(jsonurl);
-    console.log('Loaded JSON Data:', jsonData);
 
-    let stations = jsonData.data.stations;
-    console.log('Stations Array:', stations);
+const jsonurl = 'https://dsc106.com/labs/lab07/data/bluebikes-stations.json';
+const jsonData = await d3.json(jsonurl);
+console.log('Loaded JSON Data:', jsonData);
 
-    const circles = svg
-      .selectAll('circle')
-      .data(stations)
-      .enter()
-      .append('circle')
-      .attr('r', 5)
-      .attr('fill', 'steelblue')
-      .attr('stroke', 'white')
-      .attr('stroke-width', 1)
-      .attr('opacity', 0.8);
+let stations = jsonData.data.stations;
+console.log('Stations Array:', stations);
 
-    function updatePositions() {
-      circles
-        .attr('cx', (d) => getCoords(d).cx)
-        .attr('cy', (d) => getCoords(d).cy);
-    }
+const circles = svg
+    .selectAll('circle')
+    .data(stations)
+    .enter()
+    .append('circle')
+    .attr('r', 5)
+    .attr('fill', 'steelblue')
+    .attr('stroke', 'white')
+    .attr('stroke-width', 1)
+    .attr('opacity', 0.8);
 
-    updatePositions();
+function updatePositions() {
+    circles
+    .attr('cx', (d) => getCoords(d).cx)
+    .attr('cy', (d) => getCoords(d).cy);
+}
 
-    map.on('move', updatePositions);
-    map.on('zoom', updatePositions);
-    map.on('resize', updatePositions);
-    map.on('moveend', updatePositions);
+updatePositions();
 
-  } catch (error) {
-    console.error('Error loading JSON:', error);
-  }
+map.on('move', updatePositions);
+map.on('zoom', updatePositions);
+map.on('resize', updatePositions);
+map.on('moveend', updatePositions);
 });
