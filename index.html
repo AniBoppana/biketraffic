@@ -14,7 +14,15 @@
     <script src="map.js" type="module"></script>
   </head>
   <body>
-    <h1>Observing Bike Traffic</h1>
+    <header style="display: flex; gap: 1em; align-items: baseline; width: 90%;">
+      <h1>Bike Traffic</h1>
+      <label style="margin-left: auto;">
+        Filter by time:
+        <input id="time-slider" type="range" min="-1" max="1439" value="-1" step="1" />
+        <time id="selected-time"></time>
+        <em id="any-time" style="color: #888; font-style: italic;">(any time)</em>
+      </label>
+    </header>
     <div id="map">
       <svg></svg>
     </div>
