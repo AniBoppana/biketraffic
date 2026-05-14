@@ -19,7 +19,7 @@ const bikeLaneStyle = {
 };
 
 function getCoords(station) {
-  const point = new mapboxgl.LngLat(+station.Long, +station.Lat);
+  const point = new mapboxgl.LngLat(+station.lon, +station.lat);
   const { x, y } = map.project(point);
   return { cx: x, cy: y };
 }
@@ -89,9 +89,8 @@ map.on('load', async () => {
   });
 
   const svg = d3.select('#map').select('svg');
-  const jsonurl = 'bluebikes-stations.json';
+  const jsonurl = 'https://raw.githubusercontent.com/cambridgegis/cambridgegis_data/main/Recreation/Bike_Facilities/RECREATION_BikeFacilities.geojson';
   const jsonData = await d3.json(jsonurl);
-  let stations = jsonData.data.stations.filter(d => !isNaN(+d.Lat) && !isNaN(+d.Long));
 
   let trips = await d3.csv(
     'https://dsc106.com/labs/lab07/data/bluebikes-traffic-2024-03.csv',
