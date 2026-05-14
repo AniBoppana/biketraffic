@@ -53,7 +53,7 @@ map.on('load', async () => {
   const svg = d3.select('#map').select('svg');
 
 
-const jsonurl = '/Users/ani/Documents/GitHub/biketraffic/bluebikes-stations.json';
+const jsonurl = 'bluebikes-stations.json';
 const jsonData = await d3.json(jsonurl);
 console.log('Loaded JSON Data:', jsonData);
 
