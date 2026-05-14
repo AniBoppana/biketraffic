@@ -89,11 +89,11 @@ map.on('load', async () => {
   });
 
   const svg = d3.select('#map').select('svg');
-  const jsonurl = 'https://raw.githubusercontent.com/cambridgegis/cambridgegis_data/main/Recreation/Bike_Facilities/RECREATION_BikeFacilities.geojson';
+  const jsonurl = 'bluebikes-stations.json';
   const jsonData = await d3.json(jsonurl);
 
   let trips = await d3.csv(
-    'https://dsc106.com/labs/lab07/data/bluebikes-traffic-2024-03.csv',
+    'bluebikes-traffic-2024-03.csv',
     (trip) => {
       trip.started_at = new Date(trip.started_at);
       trip.ended_at = new Date(trip.ended_at);
