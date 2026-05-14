@@ -1,3 +1,4 @@
+import * as d3 from 'https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm';
 import mapboxgl from 'https://cdn.jsdelivr.net/npm/mapbox-gl@2.15.0/+esm';
 // Check that Mapbox GL JS is loaded
 console.log('Mapbox GL JS Loaded:', mapboxgl);
@@ -19,6 +20,12 @@ const bikeLaneStyle = {
   'line-opacity': 0.6
 };
 
+function getCoords(station) {
+  const point = new mapboxgl.LngLat(+station.Long, +station.Lat);
+  const { x, y } = map.project(point);
+  return { cx: x, cy: y };
+}
+
 map.on('load', async () => {
   map.addSource('boston_route', {
     type: 'geojson',
@@ -29,6 +36,7 @@ map.on('load', async () => {
     type: 'line',
     source: 'boston_route',
     paint: bikeLaneStyle,
+    
   });
 
   map.addSource('cambridge_route', {
@@ -41,4 +49,42 @@ map.on('load', async () => {
     source: 'cambridge_route',
     paint: bikeLaneStyle,
   });
+
+  const svg = d3.select('#map').select('svg');
+
+  try {
+    const jsonurl = 'https://dsc106.com/labs/lab07/data/bluebikes-stations.json';
+    const jsonData = await d3.json(jsonurl);
+    console.log('Loaded JSON Data:', jsonData);
+
+    let stations = jsonData.data.stations;
+    console.log('Stations Array:', stations);
+
+    const circles = svg
+      .selectAll('circle')
+      .data(stations)
+      .enter()
+      .append('circle')
+      .attr('r', 5)
+      .attr('fill', 'steelblue')
+      .attr('stroke', 'white')
+      .attr('stroke-width', 1)
+      .attr('opacity', 0.8);
+
+    function updatePositions() {
+      circles
+        .attr('cx', (d) => getCoords(d).cx)
+        .attr('cy', (d) => getCoords(d).cy);
+    }
+
+    updatePositions();
+
+    map.on('move', updatePositions);
+    map.on('zoom', updatePositions);
+    map.on('resize', updatePositions);
+    map.on('moveend', updatePositions);
+
+  } catch (error) {
+    console.error('Error loading JSON:', error);
+  }
 });
