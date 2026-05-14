@@ -91,6 +91,7 @@ map.on('load', async () => {
   const svg = d3.select('#map').select('svg');
   const jsonurl = 'bluebikes-stations.json';
   const jsonData = await d3.json(jsonurl);
+  let stations = jsonData.data.stations;
 
   let trips = await d3.csv(
     'bluebikes-traffic-2024-03.csv',
