@@ -53,13 +53,11 @@ map.on('load', async () => {
   const svg = d3.select('#map').select('svg');
 
 
-const jsonurl = 'https://dsc106.com/labs/lab07/data/bluebikes-stations.json';
+const jsonurl = 'bluebikes-stations.json';
 const jsonData = await d3.json(jsonurl);
 console.log('Loaded JSON Data:', jsonData);
 
 let stations = jsonData.data.stations;
-// Filter out stations with invalid coordinates
-stations = stations.filter(d => !isNaN(+d.Lat) && !isNaN(+d.Long));
 
 console.log('Stations Array:', stations);
 
