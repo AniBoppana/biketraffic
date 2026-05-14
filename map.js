@@ -21,7 +21,7 @@ const bikeLaneStyle = {
 };
 
 function getCoords(station) {
-  const point = new mapboxgl.LngLat(+station.Long, +station.Lat);
+  const point = new mapboxgl.LngLat(+station.lon, +station.lat);
   const { x, y } = map.project(point);
   return { cx: x, cy: y };
 }
@@ -53,7 +53,7 @@ map.on('load', async () => {
   const svg = d3.select('#map').select('svg');
 
 
-const jsonurl = 'bluebikes-stations.json';
+const jsonurl = '/Users/ani/Documents/GitHub/biketraffic/bluebikes-stations.json';
 const jsonData = await d3.json(jsonurl);
 console.log('Loaded JSON Data:', jsonData);
 
