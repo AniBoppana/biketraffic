@@ -32,9 +32,39 @@ h1 {
   pointer-events: none;
 }
 
+#map svg circle,
+.legend > div {
+  --color-departures: steelblue;
+  --color-arrivals: darkorange;
+  --color: color-mix(
+    in oklch,
+    var(--color-departures) calc(100% * var(--departure-ratio)),
+    var(--color-arrivals)
+  );
+  fill: var(--color);
+}
+
 #map svg circle {
   pointer-events: auto;
   fill-opacity: 0.6;
   stroke: white;
   stroke-width: 1;
+}
+
+.legend {
+  display: flex;
+  gap: 1px;
+  margin-block: 1.5em;
+  border-radius: 6px;
+  overflow: hidden;
+  font-size: 1em;
+  box-shadow: 0 1px 4px #0001;
+  width: 90%;
+  max-width: 600px;
+}
+
+.legend > div {
+  flex: 1;
+  color: #fff;
+  font-weight: bold;
 }
