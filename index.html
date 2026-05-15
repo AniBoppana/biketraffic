@@ -18,8 +18,10 @@
       <h1>Bike Traffic</h1>
       <label style="margin-left: auto;">
         Filter by time:
-        <input id="time-slider" type="range" min="-1" max="1439" value="-1" step="1" />
-        <time id="selected-time"></time>
+        <input id="time-slider" type="range" min="-1" max="1439" value="-1" step="1" style="width: 350px;">
+        <br>
+        <time id="selected-time" style="display: inline-block;"></time>
+        <em id="any-time" style="color: #888; font-style: italic; display: inline-block;">(any time)</em>
       </label>
     </header>
     <div id="map">
