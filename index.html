@@ -16,12 +16,14 @@
   <body>
     <header style="display: flex; gap: 1em; align-items: baseline; width: 90%;">
       <h1>Bike Traffic</h1>
-      <label style="margin-left: auto;">
+      <label style="margin-left: auto; text-align: right; display: block;">
         Filter by time:
         <input id="time-slider" type="range" min="-1" max="1439" value="-1" step="1" style="width: 350px;">
         <br>
-        <time id="selected-time" style="display: inline-block;"></time>
-        <em id="any-time" style="color: #888; font-style: italic; display: inline-block;">(any time)</em>
+        <span style="display: flex; flex-direction: column; align-items: flex-end;">
+          <time id="selected-time" style="display: inline-block;"></time>
+          <em id="any-time" style="color: #888; font-style: italic; display: inline-block;">(any time)</em>
+        </span>
       </label>
     </header>
     <div id="map">
