@@ -59,10 +59,12 @@ function computeStationTraffic(stations, timeFilter = -1, departuresByMinute, ar
   );
   return stations.map(station => {
     let id = station.short_name;
-    station.arrivals = arrivals.get(id) ?? 0;
-    station.departures = departures.get(id) ?? 0;
-    station.totalTraffic = station.arrivals + station.departures;
-    return station;
+    return {
+      ...station,
+      arrivals: arrivals.get(id) ?? 0,
+      departures: departures.get(id) ?? 0,
+      totalTraffic: (arrivals.get(id) ?? 0) + (departures.get(id) ?? 0)
+    };
   });
 }
 
