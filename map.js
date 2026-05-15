@@ -162,8 +162,6 @@ map.on('load', async () => {
       .data(filteredStations, d => d.short_name)
       .join(
         enter => enter.append('circle')
-          .attr('fill', 'steelblue')
-          .attr('fill-opacity', 0.6)
           .attr('stroke', 'white')
           .attr('stroke-width', 1)
           .attr('pointer-events', 'auto')
