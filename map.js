@@ -120,7 +120,7 @@ map.on('load', async () => {
   let radiusScale = d3
     .scaleSqrt()
     .domain([0, d3.max(stationData, d => d.totalTraffic)])
-    .range([0, 12]);
+    .range([0, 20]);
 
   let stationFlow = d3.scaleQuantize().domain([0, 1]).range([0, 0.5, 1]);
 
@@ -152,9 +152,9 @@ map.on('load', async () => {
     let filteredStations = computeStationTraffic(stations, timeFilter, departuresByMinute, arrivalsByMinute);
     let maxTraffic = d3.max(filteredStations, d => d.totalTraffic);
     if (timeFilter === -1) {
-      radiusScale.range([0, 12]);
+      radiusScale.range([0, 20]);
     } else {
-      radiusScale.range([2, 20]);
+      radiusScale.range([4, 32]);
     }
     radiusScale.domain([0, maxTraffic]);
     circles = svg
