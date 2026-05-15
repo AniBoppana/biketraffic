@@ -54,20 +54,30 @@ h1 {
 
 .legend {
   display: flex;
-  gap: 1px;
-  margin-block: 1.5em;
-  border-radius: 6px;
-  overflow: hidden;
-  font-size: 1em;
-  box-shadow: 0 1px 4px #0001;
-  width: 90%;
-  max-width: 600px;
+  align-items: center;
+  gap: 1.5em;
+  margin-block: 1em;
+  font-size: 0.95em;
+}
+
+.legend-label {
+  font-weight: bold;
+  color: #555;
+  letter-spacing: 0.05em;
 }
 
 .legend > div {
-  flex: 1;
-  color: #fff;
-  font-weight: bold;
-  text-shadow: 0 1px 2px #0008;
-  padding: 0.4em 1.5em;
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.legend > div::before {
+  content: '';
+  display: inline-block;
+  width: 1.2em;
+  height: 1.2em;
+  border-radius: 50%;
+  background: var(--color);
+  flex-shrink: 0;
 }
