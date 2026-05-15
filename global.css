@@ -53,18 +53,42 @@ h1 {
 
 .legend {
   display: flex;
-  gap: 1px;
+  gap: 2em;
   margin-block: 1.5em;
-  border-radius: 6px;
-  overflow: hidden;
   font-size: 1em;
-  box-shadow: 0 1px 4px #0001;
+  align-items: center;
   width: 90%;
   max-width: 600px;
+  background: none;
+  box-shadow: none;
+  border-radius: 0;
+  overflow: visible;
 }
 
 .legend > div {
-  flex: 1;
-  color: #fff;
-  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  color: #222;
+  font-weight: normal;
+  background: none;
+  flex: none;
+}
+
+.legend-dot {
+  --color-departures: steelblue;
+  --color-arrivals: darkorange;
+  --color: color-mix(
+    in oklch,
+    var(--color-departures) calc(100% * var(--departure-ratio)),
+    var(--color-arrivals)
+  );
+  display: inline-block;
+  width: 1.2em;
+  height: 1.2em;
+  border-radius: 50%;
+  background: var(--color);
+  border: 2px solid #fff;
+  box-shadow: 0 1px 2px #0002;
+  margin-right: 0.2em;
 }
